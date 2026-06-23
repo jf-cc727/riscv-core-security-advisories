@@ -1,0 +1,51 @@
+emu compiled at Jun 12 2026, 14:54:12
+Using simulated 32768B flash
+Using simulated 2048MB RAM
+The image is /data/runs/caijf/dut/cve-issue/Nutshell/cve/poc/NS-3/poc/poc.img
+Core 0: [31mHIT BAD TRAP at pc = 0x80000280
+[0m[35mCore-0 instrCnt = 112, cycleCnt = 1,107, IPC = 0.101174
+[0m[34mSeed=0 Guest cycle spent: 1,110 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 8ms
+[0m======== PerfCnt =========
+                1107 <- Mcycle
+                 112 <- Minstret
+                   0 <- MultiCommit
+                 841 <- MimemStall
+                  80 <- MaluInstr
+                   4 <- MbruInstr
+                   8 <- MlsuInstr
+                   0 <- MmduInstr
+                  16 <- McsrInstr
+                   1 <- MloadInstr
+                   0 <- MmmioInstr
+                   0 <- MmulInstr
+                  12 <- MifuFlush
+                   2 <- MbpBRight
+                   2 <- MbpBWrong
+                   0 <- MbpJRight
+                   0 <- MbpJWrong
+                   0 <- MbpIRight
+                   0 <- MbpIWrong
+                   0 <- MbpRRight
+                   0 <- MbpRWrong
+                   0 <- Custom1
+                   1 <- Custom2
+                   0 <- Custom3
+                   0 <- Custom4
+                   0 <- Custom5
+                   1 <- Custom6
+                   0 <- Custom7
+                   0 <- Custom8
+                   0 <- MrawStall
+                 172 <- MexuBusy
+                   2 <- MloadStall
+                 192 <- MstoreStall
+                 136 <- ISUIssue
+======== PerfCntCSV =========
+
+Mcycle, Minstret, MultiCommit, MimemStall, MaluInstr, MbruInstr, MlsuInstr, MmduInstr, McsrInstr, MloadInstr, MmmioInstr, MmulInstr, MifuFlush, MbpBRight, MbpBWrong, MbpJRight, MbpJWrong, MbpIRight, MbpIWrong, MbpRRight, MbpRWrong, Custom1, Custom2, Custom3, Custom4, Custom5, Custom6, Custom7, Custom8, MrawStall, MexuBusy, MloadStall, MstoreStall, ISUIssue, 
+
+
+                1107,                  112,                    0,                  841,                   80,                    4,                    8,                    0,                   16,                    1,                    0,                    0,                   12,                    2,                    2,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    1,                    0,                    0,                    0,                    1,                    0,                    0,                    0,                  172,                    2,                  192,                  136, 
+
+

@@ -1,0 +1,51 @@
+emu compiled at Jun 12 2026, 14:54:12
+Using simulated 32768B flash
+Using simulated 2048MB RAM
+The image is /data/runs/caijf/dut/cve-issue/Nutshell/cve/poc/NS-2/poc/poc.img
+Core 0: [31mHIT BAD TRAP at pc = 0x80002010
+[0m[35mCore-0 instrCnt = 44, cycleCnt = 974, IPC = 0.045175
+[0m[34mSeed=0 Guest cycle spent: 977 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 7ms
+[0m======== PerfCnt =========
+                 974 <- Mcycle
+                  44 <- Minstret
+                   0 <- MultiCommit
+                 863 <- MimemStall
+                  20 <- MaluInstr
+                   2 <- MbruInstr
+                   7 <- MlsuInstr
+                   0 <- MmduInstr
+                  13 <- McsrInstr
+                   3 <- MloadInstr
+                   0 <- MmmioInstr
+                   0 <- MmulInstr
+                   7 <- MifuFlush
+                   1 <- MbpBRight
+                   1 <- MbpBWrong
+                   0 <- MbpJRight
+                   0 <- MbpJWrong
+                   0 <- MbpIRight
+                   0 <- MbpIWrong
+                   0 <- MbpRRight
+                   0 <- MbpRWrong
+                   0 <- Custom1
+                   0 <- Custom2
+                   0 <- Custom3
+                   0 <- Custom4
+                   0 <- Custom5
+                   1 <- Custom6
+                   0 <- Custom7
+                   0 <- Custom8
+                   1 <- MrawStall
+                 101 <- MexuBusy
+                  13 <- MloadStall
+                  88 <- MstoreStall
+                  52 <- ISUIssue
+======== PerfCntCSV =========
+
+Mcycle, Minstret, MultiCommit, MimemStall, MaluInstr, MbruInstr, MlsuInstr, MmduInstr, McsrInstr, MloadInstr, MmmioInstr, MmulInstr, MifuFlush, MbpBRight, MbpBWrong, MbpJRight, MbpJWrong, MbpIRight, MbpIWrong, MbpRRight, MbpRWrong, Custom1, Custom2, Custom3, Custom4, Custom5, Custom6, Custom7, Custom8, MrawStall, MexuBusy, MloadStall, MstoreStall, ISUIssue, 
+
+
+                 974,                   44,                    0,                  863,                   20,                    2,                    7,                    0,                   13,                    3,                    0,                    0,                    7,                    1,                    1,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    1,                    0,                    0,                    1,                  101,                   13,                   88,                   52, 
+
+

@@ -1,0 +1,19 @@
+# NutShell Invalid Sv39 `W=1,R=0` Leaf Acceptance Package
+
+This package is for CVE review.
+
+Issue link: `public issue URL will be added after issue publication`
+
+This package is confirmed on the official `release-211228` line at revision `release-211228-142-g041f694` (`041f694965728ea183a0622daa1734002bf4621e`). No local fix revision has been identified yet.
+
+**Candidate title.** OSCPU NutShell accepts invalid Sv39 `W=1,R=0` leaf PTEs as writable mappings
+
+The public issue only states the architectural bug. The security setting, the separate security PoC, and the extra evidence stay in this package.
+
+## What is in this package
+- `VULNERABILITY_REPORT.md` and `VULNERABILITY_REPORT.pdf`: the main report.
+- `poc/issue-context.replay.log` and `poc/image/issue-context-actual.png`: the issue-level architectural replay excerpt.
+- `poc/poc.S`, `poc/poc.elf`, `poc/poc.nutshell.replay.log`, `poc/poc.nutshell.nodiff.log`, and the matching screenshots: the security PoC and its evidence.
+
+## How to read it
+Read `VULNERABILITY_REPORT.md` first. The report is split into two tracks: the issue-level architectural reproduction, and the separate security PoC with impact evidence.

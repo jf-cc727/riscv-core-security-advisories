@@ -1,0 +1,51 @@
+emu compiled at Jun 12 2026, 14:54:12
+Using simulated 32768B flash
+Using simulated 2048MB RAM
+The image is /data/runs/caijf/dut/cve-issue/Nutshell/cve/poc/NS-7/poc/poc.img
+Core 0: [31mHIT BAD TRAP at pc = 0x800001a8
+[0m[35mCore-0 instrCnt = 73, cycleCnt = 903, IPC = 0.080842
+[0m[34mSeed=0 Guest cycle spent: 906 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 7ms
+[0m======== PerfCnt =========
+                 903 <- Mcycle
+                  73 <- Minstret
+                   0 <- MultiCommit
+                 680 <- MimemStall
+                  51 <- MaluInstr
+                   1 <- MbruInstr
+                   6 <- MlsuInstr
+                   0 <- MmduInstr
+                  12 <- McsrInstr
+                   1 <- MloadInstr
+                   0 <- MmmioInstr
+                   0 <- MmulInstr
+                   8 <- MifuFlush
+                   0 <- MbpBRight
+                   1 <- MbpBWrong
+                   0 <- MbpJRight
+                   0 <- MbpJWrong
+                   0 <- MbpIRight
+                   0 <- MbpIWrong
+                   0 <- MbpRRight
+                   0 <- MbpRWrong
+                   0 <- Custom1
+                   1 <- Custom2
+                   0 <- Custom3
+                   0 <- Custom4
+                   0 <- Custom5
+                   0 <- Custom6
+                   0 <- Custom7
+                   0 <- Custom8
+                   0 <- MrawStall
+                 170 <- MexuBusy
+                   2 <- MloadStall
+                 168 <- MstoreStall
+                  91 <- ISUIssue
+======== PerfCntCSV =========
+
+Mcycle, Minstret, MultiCommit, MimemStall, MaluInstr, MbruInstr, MlsuInstr, MmduInstr, McsrInstr, MloadInstr, MmmioInstr, MmulInstr, MifuFlush, MbpBRight, MbpBWrong, MbpJRight, MbpJWrong, MbpIRight, MbpIWrong, MbpRRight, MbpRWrong, Custom1, Custom2, Custom3, Custom4, Custom5, Custom6, Custom7, Custom8, MrawStall, MexuBusy, MloadStall, MstoreStall, ISUIssue, 
+
+
+                 903,                   73,                    0,                  680,                   51,                    1,                    6,                    0,                   12,                    1,                    0,                    0,                    8,                    0,                    1,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                    1,                    0,                    0,                    0,                    0,                    0,                    0,                    0,                  170,                    2,                  168,                   91, 
+
+
