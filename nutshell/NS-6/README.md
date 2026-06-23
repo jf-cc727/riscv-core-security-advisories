@@ -4,7 +4,7 @@ This package is for CVE review.
 
 Issue link: `public issue URL will be added after issue publication`
 
-This package is confirmed on the official `release-211228` line at revision `release-211228-142-g041f694` (`041f694965728ea183a0622daa1734002bf4621e`). No local fix revision has been identified yet.
+This package is based on the official `release-211228` release tag and was confirmed affected at revision `release-211228-142-g041f694` (`041f694965728ea183a0622daa1734002bf4621e`). No local fix revision has been identified yet.
 
 **Candidate title.** OSCPU NutShell accepts misaligned Sv39 1 GiB leaf PTEs and resolves invalid physical aliases instead of raising a load page fault
 
