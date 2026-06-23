@@ -2,7 +2,7 @@
 
 This package is for CVE review.
 
-Issue link: `public issue URL will be added after issue publication`
+Issue link: `https://github.com/OSCPU/NutShell/issues/262`
 
 This package is based on the official `release-211228` release tag and was confirmed affected at revision `release-211228-142-g041f694` (`041f694965728ea183a0622daa1734002bf4621e`). No local fix revision has been identified yet.
 
