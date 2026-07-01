@@ -1,0 +1,10 @@
+emu compiled at Jun 25 2026, 04:18:40
+Using simulated 32768B flash
+Core  0's Commit SHA is: 96c3f568f9, dirty: 0
+Using simulated 2048MB RAM
+The image is poc.img
+Core 0: [32mHIT GOOD TRAP at pc = 0x800000ec
+[0m[35mCore-0 instrCnt = 44, cycleCnt = 2,429, IPC = 0.018114
+[0m[34mSeed=0 Guest cycle spent: 2,459 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 11,695ms
+[0m

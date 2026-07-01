@@ -1,0 +1,96 @@
+
+poc.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000080000000 <_start>:
+    80000000:	00000297          	auipc	t0,0x0
+    80000004:	11828293          	add	t0,t0,280 # 80000118 <unexpected_trap>
+    80000008:	30529073          	csrw	mtvec,t0
+    8000000c:	00200293          	li	t0,2
+    80000010:	3042a073          	csrs	mie,t0
+    80000014:	30402373          	csrr	t1,mie
+    80000018:	00537333          	and	t1,t1,t0
+    8000001c:	0c030c63          	beqz	t1,800000f4 <inconclusive>
+    80000020:	03000313          	li	t1,48
+    80000024:	35031073          	csrw	miselect,t1
+    80000028:	10000393          	li	t2,256
+    8000002c:	35139073          	csrw	mireg,t2
+    80000030:	35102e73          	csrr	t3,mireg
+    80000034:	000103b7          	lui	t2,0x10
+    80000038:	f003839b          	addw	t2,t2,-256 # ff00 <PRIO_MASK>
+    8000003c:	007e7e33          	and	t3,t3,t2
+    80000040:	10000393          	li	t2,256
+    80000044:	0a7e1863          	bne	t3,t2,800000f4 <inconclusive>
+    80000048:	00200293          	li	t0,2
+    8000004c:	3042b073          	csrc	mie,t0
+    80000050:	35102e73          	csrr	t3,mireg
+    80000054:	00002e97          	auipc	t4,0x2
+    80000058:	face8e93          	add	t4,t4,-84 # 80002000 <saved_iprio0>
+    8000005c:	01ceb023          	sd	t3,0(t4)
+    80000060:	000ebe03          	ld	t3,0(t4)
+    80000064:	351e1073          	csrw	mireg,t3
+    80000068:	3042a073          	csrs	mie,t0
+    8000006c:	35102e73          	csrr	t3,mireg
+    80000070:	000103b7          	lui	t2,0x10
+    80000074:	f003839b          	addw	t2,t2,-256 # ff00 <PRIO_MASK>
+    80000078:	007e7e33          	and	t3,t3,t2
+    8000007c:	10000393          	li	t2,256
+    80000080:	027e0663          	beq	t3,t2,800000ac <pass>
+    80000084:	040e0663          	beqz	t3,800000d0 <bug_persistent_priority_loss>
+    80000088:	02900513          	li	a0,41
+    8000008c:	00001e97          	auipc	t4,0x1
+    80000090:	f74e8e93          	add	t4,t4,-140 # 80001000 <tohost>
+    80000094:	00151f13          	sll	t5,a0,0x1
+    80000098:	001f6f13          	or	t5,t5,1
+    8000009c:	01eeb023          	sd	t5,0(t4)
+    800000a0:	0ff0000f          	fence
+    800000a4:	0005006b          	.word	0x0005006b
+    800000a8:	0000006f          	j	800000a8 <_start+0xa8>
+
+00000000800000ac <pass>:
+    800000ac:	00000513          	li	a0,0
+    800000b0:	00001e97          	auipc	t4,0x1
+    800000b4:	f50e8e93          	add	t4,t4,-176 # 80001000 <tohost>
+    800000b8:	00151f13          	sll	t5,a0,0x1
+    800000bc:	001f6f13          	or	t5,t5,1
+    800000c0:	01eeb023          	sd	t5,0(t4)
+    800000c4:	0ff0000f          	fence
+    800000c8:	0005006b          	.word	0x0005006b
+    800000cc:	0000006f          	j	800000cc <pass+0x20>
+
+00000000800000d0 <bug_persistent_priority_loss>:
+    800000d0:	01f00513          	li	a0,31
+    800000d4:	00001e97          	auipc	t4,0x1
+    800000d8:	f2ce8e93          	add	t4,t4,-212 # 80001000 <tohost>
+    800000dc:	00151f13          	sll	t5,a0,0x1
+    800000e0:	001f6f13          	or	t5,t5,1
+    800000e4:	01eeb023          	sd	t5,0(t4)
+    800000e8:	0ff0000f          	fence
+    800000ec:	0005006b          	.word	0x0005006b
+    800000f0:	0000006f          	j	800000f0 <bug_persistent_priority_loss+0x20>
+
+00000000800000f4 <inconclusive>:
+    800000f4:	02800513          	li	a0,40
+    800000f8:	00001e97          	auipc	t4,0x1
+    800000fc:	f08e8e93          	add	t4,t4,-248 # 80001000 <tohost>
+    80000100:	00151f13          	sll	t5,a0,0x1
+    80000104:	001f6f13          	or	t5,t5,1
+    80000108:	01eeb023          	sd	t5,0(t4)
+    8000010c:	0ff0000f          	fence
+    80000110:	0005006b          	.word	0x0005006b
+    80000114:	0000006f          	j	80000114 <inconclusive+0x20>
+
+0000000080000118 <unexpected_trap>:
+    80000118:	34202473          	csrr	s0,mcause
+    8000011c:	341024f3          	csrr	s1,mepc
+    80000120:	03c00513          	li	a0,60
+    80000124:	00001e97          	auipc	t4,0x1
+    80000128:	edce8e93          	add	t4,t4,-292 # 80001000 <tohost>
+    8000012c:	00151f13          	sll	t5,a0,0x1
+    80000130:	001f6f13          	or	t5,t5,1
+    80000134:	01eeb023          	sd	t5,0(t4)
+    80000138:	0ff0000f          	fence
+    8000013c:	0005006b          	.word	0x0005006b
+    80000140:	0000006f          	j	80000140 <unexpected_trap+0x28>
