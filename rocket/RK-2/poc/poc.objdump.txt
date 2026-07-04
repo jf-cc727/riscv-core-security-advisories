@@ -1,0 +1,61 @@
+
+poc.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000080000000 <_start>:
+    80000000:	00000f97          	auipc	t6,0x0
+    80000004:	0a0f8f93          	addi	t6,t6,160 # 800000a0 <trap>
+    80000008:	305f9073          	csrw	mtvec,t6
+    8000000c:	fff00293          	li	t0,-1
+    80000010:	3b029073          	csrw	pmpaddr0,t0
+    80000014:	01f00293          	li	t0,31
+    80000018:	3a029073          	csrw	pmpcfg0,t0
+    8000001c:	00000297          	auipc	t0,0x0
+    80000020:	02828293          	addi	t0,t0,40 # 80000044 <hs_entry>
+    80000024:	34129073          	csrw	mepc,t0
+    80000028:	00002337          	lui	t1,0x2
+    8000002c:	8003031b          	addiw	t1,t1,-2048 # 1800 <MSTATUS_MPP_MASK>
+    80000030:	30033073          	csrc	mstatus,t1
+    80000034:	00001337          	lui	t1,0x1
+    80000038:	8003031b          	addiw	t1,t1,-2048 # 800 <MSTATUS_MPP_S>
+    8000003c:	30032073          	csrs	mstatus,t1
+    80000040:	30200073          	mret
+
+0000000080000044 <hs_entry>:
+    80000044:	00000f97          	auipc	t6,0x0
+    80000048:	05cf8f93          	addi	t6,t6,92 # 800000a0 <trap>
+    8000004c:	105f9073          	csrw	stvec,t6
+    80000050:	000c02b7          	lui	t0,0xc0
+    80000054:	60229073          	csrw	hedeleg,t0
+    80000058:	60202473          	csrr	s0,hedeleg
+    8000005c:	00547433          	and	s0,s0,t0
+    80000060:	02541263          	bne	s0,t0,80000084 <fail_masked>
+    80000064:	60201073          	csrw	hedeleg,zero
+    80000068:	00000513          	li	a0,0
+    8000006c:	00001f17          	auipc	t5,0x1
+    80000070:	054f0f13          	addi	t5,t5,84 # 800010c0 <__DATA_BEGIN__>
+    80000074:	00100f93          	li	t6,1
+    80000078:	01ff3023          	sd	t6,0(t5)
+    8000007c:	0ff0000f          	fence
+    80000080:	0005006b          	.word	0x0005006b
+
+0000000080000084 <fail_masked>:
+    80000084:	03d00513          	li	a0,61
+    80000088:	00001f17          	auipc	t5,0x1
+    8000008c:	038f0f13          	addi	t5,t5,56 # 800010c0 <__DATA_BEGIN__>
+    80000090:	07b00f93          	li	t6,123
+    80000094:	01ff3023          	sd	t6,0(t5)
+    80000098:	0ff0000f          	fence
+    8000009c:	0005006b          	.word	0x0005006b
+
+00000000800000a0 <trap>:
+    800000a0:	342024f3          	csrr	s1,mcause
+    800000a4:	03e00513          	li	a0,62
+    800000a8:	00001f17          	auipc	t5,0x1
+    800000ac:	018f0f13          	addi	t5,t5,24 # 800010c0 <__DATA_BEGIN__>
+    800000b0:	07d00f93          	li	t6,125
+    800000b4:	01ff3023          	sd	t6,0(t5)
+    800000b8:	0ff0000f          	fence
+    800000bc:	0005006b          	.word	0x0005006b

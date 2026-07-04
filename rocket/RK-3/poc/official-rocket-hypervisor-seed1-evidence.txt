@@ -1,0 +1,78 @@
+Rocket RK-3 official-run evidence
+=================================
+
+Repository:
+  https://github.com/chipsalliance/rocket-chip.git
+
+Branch:
+  master
+
+Tested commit:
+  55bcad0f59436de98ea510334121de8546b9e9d7
+
+Commit date:
+  2026-06-02T10:57:09-07:00
+
+Tested configuration:
+  freechips.rocketchip.system.HypervisorConfig
+
+Emulator:
+  official Rocket Chip Verilator emulator for freechips.rocketchip.system.HypervisorConfig
+
+PoC:
+  poc/poc.S
+  local build output: poc/poc.elf
+
+Commands:
+  emulator --seed=1 poc/poc.elf
+
+Results:
+  non-verbose return code: 31
+
+Meaning of return code:
+  0  = VS sstatus read used guest vsstatus view
+  31 = VS sstatus read exposed HS host FS/SD state
+  81 = unexpected FS value
+  83 = sscratch did not remap to vsscratch
+  91 = H extension unavailable
+  92 = illegal instruction trap
+
+Disassembly anchors:
+
+  800000e0 <vs_entry>:
+  800000e0: 14002a73           csrr    s4,sscratch
+  800000f8: 0a5a1863           bne     s4,t0,800001a8 <fail_sscratch_alias>
+  800000fc: 10002473           csrr    s0,sstatus
+
+  80000144 <leak_host_status>:
+  8000014c: 0082b023           sd      s0,0(t0)
+  80000160: 0062b423           sd      t1,8(t0)
+  80000164: 01f00513           li      a0,31
+  80000168: 06c0006f           j       800001d4 <security_report_code>
+
+  800001d4 <security_report_code>:
+  800001e4: 0062b023           sd      t1,0(t0)
+  800001ec: 0000006f           j       800001ec <security_report_code+0x18>
+
+Official result:
+
+  *** FAILED *** (tohost = 31)
+  *** FAILED *** via dtm (code = 31, seed 1) after 34094 cycles
+
+Difftest value-level check:
+
+  [24] commit pc 00000000800000e0 ... csrr    s4, sscratch
+       W[r20=0000000000002222]
+
+  [31] commit pc 00000000800000fc ... csrr    s0, sstatus
+       W[r 8=8000000200006000]
+
+  REF s0 = 0x0000000200002000
+
+Interpretation:
+
+  The control read shows that VS-mode supervisor CSR substitution is active
+  for sscratch -> vsscratch. The following sstatus read returns
+  0x8000000200006000, which has FS=Dirty and SD=1. The reference value is
+  0x0000000200002000, which has FS=Initial and SD=0. The official PoC exits
+  31 only after storing the observed sstatus word into attacker_buffer.

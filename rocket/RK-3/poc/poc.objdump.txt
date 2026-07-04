@@ -1,0 +1,151 @@
+
+poc.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000080000000 <_start>:
+    80000000:	00000297          	auipc	t0,0x0
+    80000004:	16c28293          	add	t0,t0,364 # 8000016c <m_trap>
+    80000008:	30529073          	csrw	mtvec,t0
+    8000000c:	30401073          	csrw	mie,zero
+    80000010:	30047073          	csrc	mstatus,8
+    80000014:	30201073          	csrw	medeleg,zero
+    80000018:	30301073          	csrw	mideleg,zero
+    8000001c:	18001073          	csrw	satp,zero
+    80000020:	28001073          	csrw	vsatp,zero
+    80000024:	68001073          	csrw	hgatp,zero
+    80000028:	60201073          	csrw	hedeleg,zero
+    8000002c:	60301073          	csrw	hideleg,zero
+    80000030:	fff00293          	li	t0,-1
+    80000034:	3b029073          	csrw	pmpaddr0,t0
+    80000038:	01f00293          	li	t0,31
+    8000003c:	3a029073          	csrw	pmpcfg0,t0
+    80000040:	301022f3          	csrr	t0,misa
+    80000044:	08000313          	li	t1,128
+    80000048:	0062f2b3          	and	t0,t0,t1
+    8000004c:	14028a63          	beqz	t0,800001a0 <no_h_extension>
+    80000050:	000062b7          	lui	t0,0x6
+    80000054:	3002b073          	csrc	mstatus,t0
+    80000058:	000062b7          	lui	t0,0x6
+    8000005c:	3002a073          	csrs	mstatus,t0
+    80000060:	000012b7          	lui	t0,0x1
+    80000064:	1112829b          	addw	t0,t0,273 # 1111 <HOST_SSCRATCH_VAL>
+    80000068:	14029073          	csrw	sscratch,t0
+    8000006c:	000022b7          	lui	t0,0x2
+    80000070:	2222829b          	addw	t0,t0,546 # 2222 <GUEST_SSCRATCH_VAL>
+    80000074:	24029073          	csrw	vsscratch,t0
+    80000078:	20001073          	csrw	vsstatus,zero
+    8000007c:	000022b7          	lui	t0,0x2
+    80000080:	2002a073          	csrs	vsstatus,t0
+    80000084:	000022b7          	lui	t0,0x2
+    80000088:	8002829b          	addw	t0,t0,-2048 # 1800 <MSTATUS_MPP_MASK>
+    8000008c:	3002b073          	csrc	mstatus,t0
+    80000090:	000012b7          	lui	t0,0x1
+    80000094:	8002829b          	addw	t0,t0,-2048 # 800 <MSTATUS_MPP_S>
+    80000098:	3002a073          	csrs	mstatus,t0
+    8000009c:	00000297          	auipc	t0,0x0
+    800000a0:	01828293          	add	t0,t0,24 # 800000b4 <hs_entry>
+    800000a4:	34129073          	csrw	mepc,t0
+    800000a8:	30200073          	mret
+    800000ac:	05d00513          	li	a0,93
+    800000b0:	1080006f          	j	800001b8 <report_code>
+
+00000000800000b4 <hs_entry>:
+    800000b4:	60001073          	csrw	hstatus,zero
+    800000b8:	08000293          	li	t0,128
+    800000bc:	6002a073          	csrs	hstatus,t0
+    800000c0:	10000293          	li	t0,256
+    800000c4:	1002a073          	csrs	sstatus,t0
+    800000c8:	00000297          	auipc	t0,0x0
+    800000cc:	01828293          	add	t0,t0,24 # 800000e0 <vs_entry>
+    800000d0:	14129073          	csrw	sepc,t0
+    800000d4:	10200073          	sret
+    800000d8:	05e00513          	li	a0,94
+    800000dc:	0dc0006f          	j	800001b8 <report_code>
+
+00000000800000e0 <vs_entry>:
+    800000e0:	14002a73          	csrr	s4,sscratch
+    800000e4:	00001397          	auipc	t2,0x1
+    800000e8:	f2c38393          	add	t2,t2,-212 # 80001010 <observed_sscratch>
+    800000ec:	0143b023          	sd	s4,0(t2)
+    800000f0:	000022b7          	lui	t0,0x2
+    800000f4:	2222829b          	addw	t0,t0,546 # 2222 <GUEST_SSCRATCH_VAL>
+    800000f8:	0a5a1863          	bne	s4,t0,800001a8 <fail_sscratch_alias>
+    800000fc:	10002473          	csrr	s0,sstatus
+    80000100:	00001397          	auipc	t2,0x1
+    80000104:	f1838393          	add	t2,t2,-232 # 80001018 <observed_sstatus>
+    80000108:	0083b023          	sd	s0,0(t2)
+    8000010c:	000062b7          	lui	t0,0x6
+    80000110:	00547333          	and	t1,s0,t0
+    80000114:	000023b7          	lui	t2,0x2
+    80000118:	00730a63          	beq	t1,t2,8000012c <check_clean_sd>
+    8000011c:	000063b7          	lui	t2,0x6
+    80000120:	02730263          	beq	t1,t2,80000144 <leak_host_status>
+    80000124:	05100513          	li	a0,81
+    80000128:	0900006f          	j	800001b8 <report_code>
+
+000000008000012c <check_clean_sd>:
+    8000012c:	fff0029b          	addw	t0,zero,-1
+    80000130:	03f29293          	sll	t0,t0,0x3f
+    80000134:	00547333          	and	t1,s0,t0
+    80000138:	00031663          	bnez	t1,80000144 <leak_host_status>
+    8000013c:	00000513          	li	a0,0
+    80000140:	0780006f          	j	800001b8 <report_code>
+
+0000000080000144 <leak_host_status>:
+    80000144:	00001297          	auipc	t0,0x1
+    80000148:	edc28293          	add	t0,t0,-292 # 80001020 <attacker_buffer>
+    8000014c:	0082b023          	sd	s0,0(t0)
+    80000150:	00525337          	lui	t1,0x525
+    80000154:	b333031b          	addw	t1,t1,-1229 # 524b33 <STATUS_FS_DIRTY+0x51eb33>
+    80000158:	02831313          	sll	t1,t1,0x28
+    8000015c:	03130313          	add	t1,t1,49
+    80000160:	0062b423          	sd	t1,8(t0)
+    80000164:	01f00513          	li	a0,31
+    80000168:	06c0006f          	j	800001d4 <security_report_code>
+
+000000008000016c <m_trap>:
+    8000016c:	342024f3          	csrr	s1,mcause
+    80000170:	34102973          	csrr	s2,mepc
+    80000174:	343029f3          	csrr	s3,mtval
+    80000178:	00001297          	auipc	t0,0x1
+    8000017c:	eb828293          	add	t0,t0,-328 # 80001030 <trap_snapshot>
+    80000180:	0082b023          	sd	s0,0(t0)
+    80000184:	0092b423          	sd	s1,8(t0)
+    80000188:	0122b823          	sd	s2,16(t0)
+    8000018c:	0132bc23          	sd	s3,24(t0)
+    80000190:	00200313          	li	t1,2
+    80000194:	00648e63          	beq	s1,t1,800001b0 <fail_illegal>
+    80000198:	07848513          	add	a0,s1,120
+    8000019c:	01c0006f          	j	800001b8 <report_code>
+
+00000000800001a0 <no_h_extension>:
+    800001a0:	05b00513          	li	a0,91
+    800001a4:	0140006f          	j	800001b8 <report_code>
+
+00000000800001a8 <fail_sscratch_alias>:
+    800001a8:	05300513          	li	a0,83
+    800001ac:	00c0006f          	j	800001b8 <report_code>
+
+00000000800001b0 <fail_illegal>:
+    800001b0:	05c00513          	li	a0,92
+    800001b4:	0040006f          	j	800001b8 <report_code>
+
+00000000800001b8 <report_code>:
+    800001b8:	00001297          	auipc	t0,0x1
+    800001bc:	e4828293          	add	t0,t0,-440 # 80001000 <tohost>
+    800001c0:	00151313          	sll	t1,a0,0x1
+    800001c4:	00136313          	or	t1,t1,1
+    800001c8:	0062b023          	sd	t1,0(t0)
+    800001cc:	0ff0000f          	fence
+    800001d0:	0000006f          	j	800001d0 <report_code+0x18>
+
+00000000800001d4 <security_report_code>:
+    800001d4:	00001297          	auipc	t0,0x1
+    800001d8:	e2c28293          	add	t0,t0,-468 # 80001000 <tohost>
+    800001dc:	00151313          	sll	t1,a0,0x1
+    800001e0:	00136313          	or	t1,t1,1
+    800001e4:	0062b023          	sd	t1,0(t0)
+    800001e8:	0ff0000f          	fence
+    800001ec:	0000006f          	j	800001ec <security_report_code+0x18>

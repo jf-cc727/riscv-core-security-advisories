@@ -1,0 +1,35 @@
+
+poc.elf:     file format elf64-littleriscv
+
+
+Disassembly of section .text:
+
+0000000080000000 <_start>:
+    80000000:	3a002473          	csrr	s0,pmpcfg0
+    80000004:	00040293          	mv	t0,s0
+    80000008:	00800313          	li	t1,8
+
+000000008000000c <check_loop>:
+    8000000c:	0ff2f393          	zext.b	t2,t0
+    80000010:	0033fe13          	andi	t3,t2,3
+    80000014:	00200e93          	li	t4,2
+    80000018:	03de0663          	beq	t3,t4,80000044 <fail_reserved_rw>
+    8000001c:	0082d293          	srli	t0,t0,0x8
+    80000020:	fff30313          	addi	t1,t1,-1
+    80000024:	fe0314e3          	bnez	t1,8000000c <check_loop>
+    80000028:	00000513          	li	a0,0
+    8000002c:	00001f17          	auipc	t5,0x1
+    80000030:	034f0f13          	addi	t5,t5,52 # 80001060 <__DATA_BEGIN__>
+    80000034:	00100f93          	li	t6,1
+    80000038:	01ff3023          	sd	t6,0(t5)
+    8000003c:	0ff0000f          	fence
+    80000040:	0005006b          	.word	0x0005006b
+
+0000000080000044 <fail_reserved_rw>:
+    80000044:	05d00513          	li	a0,93
+    80000048:	00001f17          	auipc	t5,0x1
+    8000004c:	018f0f13          	addi	t5,t5,24 # 80001060 <__DATA_BEGIN__>
+    80000050:	0bb00f93          	li	t6,187
+    80000054:	01ff3023          	sd	t6,0(t5)
+    80000058:	0ff0000f          	fence
+    8000005c:	0005006b          	.word	0x0005006b

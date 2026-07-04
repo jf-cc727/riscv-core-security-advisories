@@ -1,0 +1,30 @@
+Official Rocket latest master RK-1 evidence (seed=1)
+Repository: https://github.com/chipsalliance/rocket-chip.git
+Commit: 55bcad0f59436de98ea510334121de8546b9e9d7
+Config: freechips.rocketchip.system.DefaultConfig
+Emulator: official mill Verilator target emulator[...].elf
+
+PoC disassembly anchors:
+8:    80000000:	3a002473          	csrr	s0,pmpcfg0
+16:    80000018:	03de0663          	beq	t3,t4,80000044 <fail_reserved_rw>
+24:    80000038:	01ff3023          	sd	t6,0(t5)
+28:0000000080000044 <fail_reserved_rw>:
+32:    80000050:	0bb00f93          	li	t6,187
+33:    80000054:	01ff3023          	sd	t6,0(t5)
+
+Verbose execution evidence:
+15970:C0:      72672 [1] pc=[0000000080000000] W[r 8=0007060404030601][1] R[r 0=0000000000000000] R[r 0=0000000000000000] inst=[3a002473] DASM(3a002473)
+15984:C0:      72728 [0] pc=[0000000080000044] W[r10=0000000000000000][0] R[r 0=0000070604040306] R[r 0=0000000000000000] inst=[05d00513] DASM(05d00513)
+16188:C0:      73633 [1] pc=[0000000080000044] W[r10=000000000000005d][1] R[r 0=0000000000000000] R[r 0=0000000000000000] inst=[05d00513] DASM(05d00513)
+16191:C0:      73636 [1] pc=[0000000080000050] W[r31=00000000000000bb][1] R[r 0=0000000000000000] R[r 0=0000000000000000] inst=[0bb00f93] DASM(0bb00f93)
+20640:*** FAILED *** (tohost = 93)
+20641:*** FAILED *** via dtm (code = 93, seed 1) after 95786 cycles
+
+Non-verbose run result:
+This emulator compiled with JTAG Remote Bitbang client. To enable, use +jtag_rbb_enable=1.
+Listening on port 38229
+*** FAILED *** (tohost = 93)
+*** FAILED *** via dtm (code = 93, seed 1) after 95786 cycles
+
+Return code:
+93

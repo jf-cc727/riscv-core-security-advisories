@@ -1,0 +1,4 @@
+This emulator compiled with JTAG Remote Bitbang client. To enable, use +jtag_rbb_enable=1.
+Listening on port 40189
+*** FAILED *** (tohost = 31)
+*** FAILED *** via dtm (code = 31, seed 1) after 34094 cycles

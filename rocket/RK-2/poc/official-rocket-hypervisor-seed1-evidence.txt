@@ -1,0 +1,83 @@
+Rocket RK-2 official-run evidence
+=================================
+
+Repository:
+  https://github.com/chipsalliance/rocket-chip.git
+
+Branch:
+  master
+
+Tested commit:
+  55bcad0f59436de98ea510334121de8546b9e9d7
+
+Commit date:
+  2026-06-02T10:57:09-07:00
+
+Tested configuration:
+  freechips.rocketchip.system.HypervisorConfig
+
+Emulator:
+  official Rocket Chip Verilator emulator for freechips.rocketchip.system.HypervisorConfig
+
+PoC:
+  poc/poc.S
+  local build output: poc/poc.elf
+
+Command:
+  emulator --seed=1 poc/poc.elf
+  emulator --seed=1 +verbose poc/poc.elf
+
+Result:
+  non-verbose return code: 61
+  verbose return code: 61
+
+Meaning of return code:
+  0  = hedeleg[18:19] writable/readable
+  61 = hedeleg[18:19] write accepted but readback masked to zero
+  62 = trap/CSR unavailable before the write/readback check completes
+
+Disassembly anchors:
+
+  8000000c: fff00293           li      t0,-1
+  80000010: 3b029073           csrw    pmpaddr0,t0
+  80000014: 01f00293           li      t0,31
+  80000018: 3a029073           csrw    pmpcfg0,t0
+  80000040: 30200073           mret
+
+  80000044 <hs_entry>:
+  8000004c: 105f9073           csrw    stvec,t6
+  80000050: 000c02b7           lui     t0,0xc0
+  80000054: 60229073           csrw    hedeleg,t0
+  80000058: 60202473           csrr    s0,hedeleg
+  8000005c: 00547433           and     s0,s0,t0
+  80000060: 02541263           bne     s0,t0,80000084 <fail_masked>
+
+  80000084 <fail_masked>:
+  80000084: 03d00513           li      a0,61
+  80000090: 07b00f93           li      t6,123
+
+Key verbose evidence:
+
+  16549:C0: 75265 [1] pc=[0000000080000044] ... inst=[00000f97]
+  16550:C0: 75266 [1] pc=[0000000080000048] ... inst=[05cf8f93]
+  16551:C0: 75267 [1] pc=[000000008000004c] ... inst=[105f9073]
+  16552:C0: 75272 [1] pc=[0000000080000050] W[r 5=00000000000c0000][1] ... inst=[000c02b7]
+  16553:C0: 75273 [1] pc=[0000000080000054] ... R[r 5=00000000000c0000] ... inst=[60229073]
+  16554:C0: 75278 [1] pc=[0000000080000058] W[r 8=0000000000000000][1] ... inst=[60202473]
+  16555:C0: 75281 [1] pc=[000000008000005c] W[r 8=0000000000000000][1] R[r 8=0000000000000000] R[r 5=00000000000c0000] inst=[00547433]
+  16556:C0: 75282 [1] pc=[0000000080000060] ... R[r 8=0000000000000000] R[r 5=00000000000c0000] inst=[02541263]
+  16557:C0: 75320 [1] pc=[0000000080000084] W[r10=000000000000003d][1] ... inst=[03d00513]
+
+Non-verbose result:
+
+  *** FAILED *** (tohost = 61)
+  *** FAILED *** via dtm (code = 61, seed 1) after 97394 cycles
+
+Source-level interpretation:
+
+  The PoC enters HS-mode, writes 0x000c0000 to hedeleg, then reads hedeleg.
+  The value read into s0 is 0x0000000000000000. Masking that value with
+  0x000c0000 still yields zero, so the branch to fail_masked is taken.
+
+  This demonstrates that, in official Rocket Chip master with HypervisorConfig,
+  hedeleg[18:19] are not preserved on CSR readback after an HS-mode write.
