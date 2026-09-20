@@ -1,0 +1,7 @@
+This emulator compiled with JTAG Remote Bitbang client. To enable, use +jtag_rbb_enable=1.
+Listening on port 37623
+/data/runs/caijf/dut/cve-issue/cva6/cve/CV-3/poc/poc.elf *** FAILED *** (tohost = 31) after 480 cycles
+*** [rvfi_tracer] INFO: Simulation terminated after        468 cycles!
+
+CPU time used: 8537.50 ms
+Wall clock time passed: 8530.11 ms
